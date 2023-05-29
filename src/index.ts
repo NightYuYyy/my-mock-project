@@ -10,16 +10,42 @@ interface MockOptions {
 }
 
 export class Mock {
-    static string(options?: MockOptions): string {
-        const {min = 1, max = 10} = options || {};// 不允许为空
+    static string(options?: MockOptions & { template?: RegExp | string }): string {
+        const {min = 1, max = 10, template} = options || {};
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        if (typeof template === 'string') {
+            return template;
+        } else if (template instanceof RegExp) {
+            const pattern = template.source;
+            if (/^[a-z]+$/i.test(pattern)) {
+                characters = 'abcdefghijklmnopqrstuvwxyz';
+            } else if (/^[A-Z]+$/i.test(pattern)) {
+                characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            } else if (/^\d+$/i.test(pattern)) {
+                characters = '0123456789';
+            } else if (/^[a-z\d]+$/i.test(pattern)) {
+                characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            } else if (/^[A-Z\d]+$/i.test(pattern)) {
+                characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            } else {
+                const set = new Set();
+                for (let i = 0; i < 0xFFFF; i++) {
+                    const character = String.fromCharCode(i);
+                    if (character.match(template)) {
+                        set.add(character);
+                    }
+                }
+                characters = Array.from(set).join('');
+            }
+        }
         const length = Math.floor(Math.random() * (max - min + 1)) + min;
         let result = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         for (let i = 0; i < length; i++) {
             result += characters.charAt(Math.floor(Math.random() * characters.length));
         }
         return result;
     }
+
 
     static number(options?: MockOptions): number {
         const {min = 0, max = 100} = options || {};
@@ -110,8 +136,12 @@ export class Mock {
             if (MockDataMethos.includes(template)) {
                 return this[template as MockDataMethosType]();
             } else {
-                return this.custom(template);
+                return this.string({template});
             }
+        } else if (typeof template === 'number') {
+            return this.number({template});
+        } else {
+            return this.boolean();
         }
     }
 
