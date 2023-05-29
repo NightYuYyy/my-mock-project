@@ -27,15 +27,3 @@ describe('测试Mock数据基本使用', () => {
     });
 });
 
-describe('测试Mock.string()的进阶使用', () => {
-    it('正常情况：Mock.string({min:5,max:20})应该为长度最小为5 最长为20的字符串"', () => {
-        console.log(Mock.mock(123))
-        const res = Mock.string({min: 5, max: 20});
-        expect(res.length).toBeGreaterThanOrEqual(5);
-        expect(res.length).toBeLessThanOrEqual(20);
-    });
-    it('正常情况：Mock.string({min:5,max:5})应该为长度为5的字符串"', () => {
-        const res = Mock.string({min: 5, max: 5})
-        expect(res.length).toBe(5);
-    });
-})

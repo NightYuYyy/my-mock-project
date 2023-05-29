@@ -135,6 +135,8 @@ export class Mock {
         } else if (typeof template === 'string') {
             if (MockDataMethos.includes(template)) {
                 return this[template as MockDataMethosType]();
+            } else if (['id', 'idcard', 'phone'].includes(template)) {
+                return this.custom(template);
             } else {
                 return this.string({template});
             }
