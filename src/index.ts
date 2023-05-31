@@ -52,7 +52,11 @@ export class Mock {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    static boolean(): boolean {
+    static boolean(options?: MockOptions): boolean {
+        const {template} = options || {};
+        if (template !== undefined) {
+            return !!template;
+        }
         return Math.random() < 0.5;
     }
 
