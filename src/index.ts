@@ -7,10 +7,11 @@ interface MockOptions {
     max?: number;
     length?: number;
     template?: MockData;
+    float?: number;
 }
 
 export class Mock {
-    static string(options?: MockOptions & { template?: RegExp | string }): string {
+    string(options?: MockOptions & { template?: RegExp | string }): string {
         const {min = 1, max = 10, template} = options || {};
         let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         if (typeof template === 'string') {
@@ -47,12 +48,15 @@ export class Mock {
     }
 
 
-    static number(options?: MockOptions): number {
-        const {min = 0, max = 100} = options || {};
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+    number(options?: MockOptions): number {
+        const {min = 0, max = 100, float = 0} = options || {};
+        const randomNumber = Math.random() * (max - min) + min;
+        const factor = Math.pow(10, float);
+        return Math.round(randomNumber * factor) / factor;
     }
 
-    static boolean(options?: MockOptions): boolean {
+
+    boolean(options?: MockOptions): boolean {
         const {template} = options || {};
         if (template !== undefined) {
             return !!template;
@@ -60,11 +64,12 @@ export class Mock {
         return Math.random() < 0.5;
     }
 
-    static date(): Date {
+    date(options?: MockOptions & { type?: string }): Date {
+        console.log(options)
         return new Date(Math.floor(Math.random() * Date.now()));
     }
 
-    static array(options?: MockOptions): any[] {
+    array(options?: MockOptions): any[] {
         const {length = 10, template} = options || {};
         const result = [];
         for (let i = 0; i < length; i++) {
@@ -73,7 +78,7 @@ export class Mock {
         return result;
     }
 
-    static object(options?: MockOptions): Record<string, any> {
+    object(options?: MockOptions): Record<string, any> {
         const {template} = options || {};
         const result: Record<string, any> = {};
         if (template !== undefined) {
@@ -93,10 +98,10 @@ export class Mock {
         return result;
     }
 
-    static custom(type: string, options?: MockOptions): any {
+    custom(type: string, options?: MockOptions): any {
         switch (type) {
             case 'phone':
-                return `+86 ${this.string({length: 11, template: /\d/})}`;
+                return `+86 ${this.string({min: 11, max: 11, template: /\d/})}`;
             case 'id':
                 return `${this.string({length: 6, template: /\d/})}${this.date().getTime()}`;
             case 'idcard':
@@ -131,9 +136,9 @@ export class Mock {
         }
     }
 
-    static mock(template: MockData): any {
+    mock(template: MockData): any {
         if (Array.isArray(template)) {
-            return this.array({template});
+            return this.array({...template});
         } else if (typeof template === 'object' && template !== null) {
             return this.object({template});
         } else if (typeof template === 'string') {
@@ -151,7 +156,7 @@ export class Mock {
         }
     }
 
-    static any(): any {
+    any(): any {
         const types = ['string', 'number', 'boolean', 'date'];
         const type = types[Math.floor(Math.random() * types.length)];
         return this.mock(type);
