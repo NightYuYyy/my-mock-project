@@ -78,8 +78,7 @@ export class Mock {
         return result;
     }
 
-    object(options?: MockOptions): Record<string, any> {
-        const {template} = options || {};
+    object(template?: MockData): Record<string, any> {
         const result: Record<string, any> = {};
         if (template !== undefined) {
             if (typeof template !== 'object' || Array.isArray(template)) {

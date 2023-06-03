@@ -51,33 +51,35 @@ console.log(mock.date({type:'format',template:'YYYY-MM-DD HH:mm:ss'})) // 生成
 
 ```typescript
 import {Mock} from 'src/index.ts';
+const mock = new Mock();
+console.log(mock.array()) // 生成一个默认长度为10的随机数组
+console.log(mock.array({length:20})) // 生成一个长度为20的随机数组
+console.log(mock.array({template:{name:['@string',{min:20,max:30}]}})) // 生成一个长度为10的随机数组，数组元素为对象，对象的name属性为一个长度为20-30的随机字符串
 
-const arr = Mock.array({length: 5, template: 'string'}); // 生成一个包含 5 个随机字符串的数组
-console.log(arr); // 输出类似于 ["aBcDeFgHiJ", "KlMnOpQrSt", "uVwXyZ1234", "56789abcdE", "fGhIjKlMnO"] 的数组
 ```
 
 ### 生成随机对象
 
 ```typescript
 import {Mock} from 'src/index.ts';
+const mock = new Mock();
+console.log(mock.object()) // 生成一个随机对象
+console.log(mock.object({name:'@string'})) // 生成一个随机对象，对象的name属性为一个随机字符串
+console.log(mock.object({name:['@string',{min:20,max:30}]})) // 生成一个随机对象，对象的name属性为一个长度为20-30的随机字符串
+console.log(mock.object({name:'#email'})) // 生成一个随机对象，对象的name属性为一个随机邮箱
+console.log(mock.object({name:'@string',age:'@number'})) // 生成一个随机对象，对象的name属性为一个随机字符串，age属性为一个随机整数
+console.log(mock.object({name:['@array',{template:'@string'}]})) // 生成一个随机对象，对象的name属性为一个随机数组，数组元素为随机字符串
 
-const obj = Mock.object({template: {name: 'string', age: 'number'}}); // 生成一个包含 name 和 age 属性的对象
-console.log(obj); // 输出类似于 {name: "aBcDeFgHiJ", age: 42} 的对象 对象属性需要指定类型
 ```
 
-### 生成自定义数据
+### 拓展数据集
 
 ```typescript
 import {Mock} from 'src/index.ts';
+const mock = new Mock();
 
-const phone = Mock.custom('phone'); // 生成一个随机的电话号码
-console.log(phone); // 输出类似于 "+86 13812345678" 的字符串
-
-const id = Mock.custom('id'); // 生成一个随机的身份证号码
-console.log(id); // 输出类似于 "610102198001010001" 的字符串
-
-const idcard = Mock.custom('idcard'); // 生成一个随机的身份证号码
-console.log(idcard); // 输出类似于 "610102198001010001" 的字符串
+mock.addTemplate({'@ip':'/^(?:\d{1,3}\.){3}\d{1,3}$/'})
+console.log(mock.string({template:'@ip'})) // 生成一个随机ip地址
 ```
 
 ### 生成任意类型的数据
@@ -87,30 +89,6 @@ import {Mock} from 'src/index.ts';
 
 const any = Mock.any(); // 生成一个随机的任意类型的数据
 console.log(any); // 输出字符串、数字、布尔值、日期等任意类型的数据 any不包含对象和数组，会陷入死循环
-```
-
-### 生成指定类型的数据
-
-```typescript
-import {Mock} from 'src/index.ts';
-
-const str = Mock.mock('string'); // 生成一个随机字符串
-console.log(str); // 输出类似于 "aBcDeFgHiJ" 的字符串
-
-const num = Mock.mock('number'); // 生成一个随机数字
-console.log(num); // 输出类似于 42 的数字
-
-const bool = Mock.mock('boolean'); // 生成一个随机布尔值
-console.log(bool); // 输出 true 或 false
-
-const date = Mock.mock('date'); // 生成一个随机日期
-console.log(date); // 输出类似于 "Sat May 28 2022 22:47:23 GMT+0800 (中国标准时间)" 的日期对象
-
-const arr = Mock.mock('array'); // 生成一个随机数组
-console.log(arr); // 输出类似于 ["aBcDeFgHiJ", 42, true, "Sat May 28 2022 22:47:23 GMT+0800 (中国标准时间)", [1, 2, 3],{name: "John", age :30}]的数组
-
-const obj = Mock.mock('object'); // 生成一个随机对象
-console.log(obj); // 输出类似于 {name: "aBcDeFgHiJ", age: 42, married: true} 的对象
 ```
 
 ## API
