@@ -3,11 +3,15 @@ import { MockData, MockOptions } from './types'
 import string from './string'
 import number from './number'
 import date from './date'
+import array from './array'
+import object from './object'
 
 export class Mock {
 
   templateMapKey: Record<string, RegExp | string> = {
     '#email': /^[a-z\d]+([-_.][a-z\d]+)*@([a-z\d]+[-.])+[a-z]{2,5}$/i,
+    '#phone': /^1[3-9]\d{9}$/,
+    '#id_card':/(^\d{15}$)|(^\d{17}([0-9]|X)$)/
   }
 
   string (options?: MockOptions): string {
@@ -27,31 +31,11 @@ export class Mock {
   }
 
   array (options?: MockOptions): any[] {
-    const { length = 10, template } = options || {}
-    const result = []
-    for (let i = 0; i < length; i++) {
-      result.push(template ? this.mock(template) : this.any())
-    }
-    return result
+   return  array(options || {}, this)
   }
 
-  object (template?: MockData): Record<string, any> {
-    const result: Record<string, any> = {}
-    if (template !== undefined) {
-      if (typeof template !== 'object' || Array.isArray(template)) {
-        throw new Error('Invalid template: must be an object')
-      }
-      const obj = template as Record<string, any>
-      for (const key in obj) {
-        result[key] = this.mock(obj[key])
-      }
-    } else {
-      const length = Math.floor(Math.random() * 10) + 1
-      for (let i = 0; i < length; i++) {
-        result[this.string()] = this.any()
-      }
-    }
-    return result
+  object (template?: Record<string, any>): Record<string, any> {
+    return object(template || {}, this)
   }
 
   mock (template: MockData): any {

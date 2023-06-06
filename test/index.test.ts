@@ -21,7 +21,7 @@ describe('测试Mock数据基本使用', () => {
     expect(Array.isArray(arr)).toBe(true);
   });
   it('正常情况：Mock.object() 返回一个对象', () => {
-    const obj = mock.object();
+    const obj = mock.object({name: '张三'});
     expect(typeof obj).toBe('object');
   });
 });
