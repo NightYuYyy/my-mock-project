@@ -1,6 +1,6 @@
-import { MockOptions } from '../types'
+import { NumberOptions } from '../types'
 
-const number = (options: MockOptions) => {
+const number = (options: NumberOptions) => {
   const { min = 0, max = 100, float = 0 } = options
   if (min > max) {
     throw new Error('Invalid input: min cannot be greater than max');

@@ -1,4 +1,9 @@
-import { MockData, MockOptions } from './types'
+import {
+  ArrayOptions,
+  DateOptions,
+  NumberOptions, ObjectOptions,
+  StringOptions,
+} from './types'
 // import { methodsTypeKey } from './const';
 import string from './string'
 import number from './number'
@@ -10,57 +15,43 @@ export class Mock {
 
   templateMapKey: Record<string, RegExp | string> = {
     '#email': /^[a-z\d]+([-_.][a-z\d]+)*@([a-z\d]+[-.])+[a-z]{2,5}$/i,
-    '#phone': /^1[3-9]\d{9}$/,
+    '#mobile': /^1[3-9]\d{9}$/,
     '#id_card':/(^\d{15}$)|(^\d{17}([0-9]|X)$)/
   }
 
-  string (options?: MockOptions): string {
+  string (options?: StringOptions): string {
     return string(options || {}, this.templateMapKey)
   }
 
-  number (options?: MockOptions): number {
+  number (options?: NumberOptions): number {
     return number(options || {})
   }
 
-  boolean (): boolean {
+  boolean (_options?:any): boolean {
     return Math.random() < 0.5
   }
 
-  date (options?: MockOptions & { type?: string }): Date | number | string {
+  date (options?: DateOptions ): Date | number | string {
     return date(options||{})
   }
 
-  array (options?: MockOptions): any[] {
+  array (options?: ArrayOptions): any[] {
    return  array(options || {}, this)
   }
 
-  object (template?: Record<string, any>): Record<string, any> {
+  object (template?: ObjectOptions): Record<string, any> {
     return object(template || {}, this)
   }
 
-  mock (template: MockData): any {
-    if (Array.isArray(template)) {
-      return this.array({ ...template })
-    } else if (typeof template === 'object' && template !== null) {
-      return this.object({ template })
-    } else if (typeof template === 'string') {
-      // if (MockDataMethods.includes( template )) {
-      //   return this[template as MockDataMethodsType]();
-      // } else if (['id', 'idcard', 'phone'].includes( template )) {
-      //   return this.custom( template );
-      // } else {
-      //   return this.string( { template } );
-      // }
-    } else if (typeof template === 'number') {
-      return this.number({ template })
-    } else {
-      return this.boolean()
+  addTemplate (key: string, value: string | RegExp): void {
+    // 判断是否有该模板
+    if (this.templateMapKey[key]) {
+      throw new Error(`模板${key}已存在`)
     }
-  }
-
-  any (): any {
-    const types = ['string', 'number', 'boolean', 'date']
-    const type = types[Math.floor(Math.random() * types.length)]
-    return this.mock(type)
+    // 判断模板名是否符合规范
+    if (!/^#\w+$/.test(key)) {
+      throw new Error(`模板名${key}不符合规范`)
+    }
+    this.templateMapKey[key] = value
   }
 }

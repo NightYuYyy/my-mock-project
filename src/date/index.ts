@@ -1,4 +1,4 @@
-import {MockOptions} from '../types'
+import { DateOptions } from '../types'
 
 const getFullYear = (date: Date): string => date.getFullYear().toString()
 
@@ -43,15 +43,10 @@ const typeMap: Record<string, (date: Date, template?: string | undefined) => Dat
 // 传入type = 'timestamp' 返回随机时间的时间戳 优先级比较高
 // 传入template 返回随机时间的格式化字符串
 // 传入其他 返回随机时间的Date对象
-const date = (options: MockOptions & {
-  type?: string
-}): Date | number | string => {
+const date = (options: DateOptions ): Date | number | string => {
   const {type = 'format', template} = options
   if (['timestamp', 'format'].indexOf(type) === -1) {
     throw new Error('Invalid type: must be a timestamp or format')
-  }
-  if (template && typeof template !== 'string') {
-    throw new Error('Invalid template: must be a string')
   }
   const date = new Date(Math.floor(Math.random() * Date.now()))
   return typeMap[type](date, template as string | undefined)

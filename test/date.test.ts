@@ -34,7 +34,4 @@ describe('测试Mock.date()的进阶使用', () => {
     expect(date).toMatch(/^aa-cc-\d{4} \d{2}:\d{2}:\d{2}$/)
     expect(date).toBeTypeOf('string')
   })
-  it('should Mock.data({template:123}) 应该返回一个随机日期时间字符串', () => {
-    expect(() => mock.date({template: 123})).toThrow('Invalid template: must be a string')
-  })
 })
