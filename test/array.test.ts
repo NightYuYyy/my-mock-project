@@ -8,16 +8,27 @@ describe('测试Mock.array()的进阶使用', () => {
     const arr = mock.array({ length: 20 })
     expect(arr.length).toBe(20)
   })
+  it('should 生成一个长度为20的数组，元素为布尔值', () => {
+    const arr = mock.array({ length: 20, template: '@boolean' })
+    expect(arr.length).toBe(20)
+    expect(typeof arr[0]).toBe('boolean')
+  })
+  it('should 生成一个数组，元素为数字', ()=>{
+    const arr = mock.array({template:'@number'})
+    expect(Array.isArray(arr)).toBe(true)
+    expect(typeof arr[0]).toBe('number')
+  });
+  it('should 生成一个数组，元素为时间戳', ()=>{
+    const arr = mock.array({template:['@date',{type:'timestamp'}]})
+    expect(Array.isArray(arr)).toBe(true)
+    expect(typeof arr[0]).toBe('number')
+  });
   it('should 生成一个长度为20的数组，元素为数组', () => {
     const arr = mock.array({ length: 20, template: '@array' })
     expect(arr.length).toBe(20)
     expect(Array.isArray(arr[0])).toBe(true)
   })
-  it('should 生成一个长度为20的数组，元素为对象', () => {
-    const arr = mock.array({ length: 20, template: { name: '@string' } })
-    expect(arr.length).toBe(20)
-    expect(typeof arr[0]).toBe('object')
-  })
+
   it('should 生成一个长度为20的数组，元素为对象，且对象的name属性为字符串', () => {
     const arr = mock.array({template:{name:['@string',{min:20,max:30}]}});
     expect(arr.length).toBe(10)
