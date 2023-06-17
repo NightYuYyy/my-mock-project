@@ -1,10 +1,10 @@
 import {
   ArrayOptions,
   DateOptions,
-  NumberOptions, ObjectOptions,
+  NumberOptions,
+  ObjectOptions,
   StringOptions,
 } from './types'
-// import { methodsTypeKey } from './const';
 import string from './string'
 import number from './number'
 import date from './date'

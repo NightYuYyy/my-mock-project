@@ -7,7 +7,7 @@ const generateString = (length: number): string => {
   const charactersLength = characters.length
   for (let i = 0; i < length; i++) {
     result += characters.charAt(
-      Math.floor(Math.random() * charactersLength))
+      Math.floor(Math.random() * (charactersLength-1)))
   }
   return result
 }
@@ -20,7 +20,7 @@ const string = (
     throw new Error('无效的输入：min 不能大于 max')
   }
   if (template === undefined) {
-    const length = Math.floor(Math.random() * (max - min + 1)) + min
+    const length = Math.floor(Math.random() * (max - min)) + min
     return generateString(length)
   }
   return such.as(

@@ -31,7 +31,7 @@ const undefinedToArray = (options: ArrayOptions, mock: Mock): any[] => {
   return result
 }
 
-const arrayMap: Record<string, (options: ArrayOptions, mock: Mock) => any[]> = {
+const typeMethodsMap: Record<string, (options: ArrayOptions, mock: Mock) => any[]> = {
   string: stringToArray,
   object: objectToArray,
   undefined: undefinedToArray,
@@ -39,6 +39,6 @@ const arrayMap: Record<string, (options: ArrayOptions, mock: Mock) => any[]> = {
 
 const array = (options: ArrayOptions, mock: Mock): any[] => {
   const { template } = options
-  return arrayMap[typeof template](options, mock)
+  return typeMethodsMap[typeof template](options, mock)
 }
 export default array

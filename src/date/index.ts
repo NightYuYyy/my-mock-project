@@ -46,7 +46,7 @@ const typeMap: Record<string, (date: Date, template?: string | undefined) => Dat
 const date = (options: DateOptions ): Date | number | string => {
   const {type = 'format', template} = options
   if (['timestamp', 'format'].indexOf(type) === -1) {
-    throw new Error('Invalid type: must be a timestamp or format')
+    throw new Error('无效类型：type必须是timestamp 或 format')
   }
   const date = new Date(Math.floor(Math.random() * Date.now()))
   return typeMap[type](date, template as string | undefined)

@@ -34,14 +34,14 @@ export interface DateOptions {
 
 export interface ObjectOptions {
   [key: string]: string |
-    [string, DateOptions | StringOptions | NumberOptions] |
+    [string, DateOptions | StringOptions | NumberOptions | ArrayOptions | ObjectOptions] |
     ObjectOptions;
 }
 
 export type TemplateType =
   string
   | ObjectOptions
-  | [string, DateOptions | StringOptions | NumberOptions];
+  | [string, DateOptions | StringOptions | NumberOptions | ArrayOptions | ObjectOptions];
 
 export interface ArrayOptions {
   length?: number;

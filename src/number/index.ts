@@ -1,15 +1,14 @@
-import { NumberOptions } from '../types'
+import {NumberOptions} from '../types'
 
 const number = (options: NumberOptions) => {
-  const { min = 0, max = 100, float = 0 } = options
+  const {min = 0, max = 100, float = 0} = options
   if (min > max) {
-    throw new Error('Invalid input: min cannot be greater than max');
+    throw new Error('无效输入：min 不能大于 max');
   }
   const randomNumber = Math.random() * (max - min) + min
-  const factor = Math.pow(10, float)
-  const roundedNumber = Math.round(randomNumber * factor) / factor
-  const formattedNumber = roundedNumber.toFixed(float)
-  return parseFloat(formattedNumber)
+  const randomDecimal = ((Math.random() * 8 + 1) / Math.pow(10, float)).toFixed(float);
+  // 计算最终的随机数
+  return float === 0 ? Math.floor(randomNumber) : Math.floor(randomNumber) + Number(randomDecimal)
 }
 
 export default number
