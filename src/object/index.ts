@@ -1,7 +1,7 @@
 import { ObjectOptions, TemplateType } from '../types'
 import { Mock } from '../index'
 import { methodsTypeMap } from '../const'
-import { objectToObject } from '../common'
+import { objectBuildForObjectType } from '../common'
 
 const stringToObject = (template: TemplateType, mock: Mock): any => {
   const method = methodsTypeMap[template as string]
@@ -11,7 +11,7 @@ const stringToObject = (template: TemplateType, mock: Mock): any => {
 const objectTemplateMap: Record<string, (
   template: TemplateType, mock: Mock) => any> = {
   string: stringToObject,
-  object: objectToObject,
+  object: objectBuildForObjectType,
 }
 const object = (
   template: ObjectOptions,
@@ -22,12 +22,6 @@ const object = (
   }
   for (const key in template) {
     result[key] = objectTemplateMap[typeof template[key]](template[key], mock)
-    if (typeof template[key] === 'string') {
-
-    }
-    if (typeof template[key] === 'object') {
-
-    }
   }
   return result
 }

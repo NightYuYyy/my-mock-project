@@ -1,9 +1,9 @@
 import { ArrayOptions, TemplateType } from '../types'
 import { Mock } from '../index'
 import { methodsTypeMap } from '../const'
-import { objectToObject } from '../common'
+import { objectBuildForObjectType } from '../common'
 
-const stringToArray = (options: ArrayOptions, mock: Mock): any[] => {
+const arrayBuildForStringType = (options: ArrayOptions, mock: Mock): any[] => {
   const { template, length = 10 } = options
   const result: any[] = []
 
@@ -13,16 +13,16 @@ const stringToArray = (options: ArrayOptions, mock: Mock): any[] => {
   return result
 }
 
-const objectToArray = (options: ArrayOptions, mock: Mock): any[] => {
+const arrayBuildForObjectType = (options: ArrayOptions, mock: Mock): any[] => {
   const { template, length = 10 } = options
   const result: any[] = []
   for (let i = 0; i < length; i++) {
-    result.push(objectToObject(template as TemplateType, mock))
+    result.push(objectBuildForObjectType(template as TemplateType, mock))
   }
   return result
 }
 
-const undefinedToArray = (options: ArrayOptions, mock: Mock): any[] => {
+const arrayBuildForUndefined = (options: ArrayOptions, mock: Mock): any[] => {
   const { length = 10 } = options
   const result: any[] = []
   for (let i = 0; i < length; i++) {
@@ -32,9 +32,9 @@ const undefinedToArray = (options: ArrayOptions, mock: Mock): any[] => {
 }
 
 const typeMethodsMap: Record<string, (options: ArrayOptions, mock: Mock) => any[]> = {
-  string: stringToArray,
-  object: objectToArray,
-  undefined: undefinedToArray,
+  string: arrayBuildForStringType,
+  object: arrayBuildForObjectType,
+  undefined: arrayBuildForUndefined,
 }
 
 const array = (options: ArrayOptions, mock: Mock): any[] => {
